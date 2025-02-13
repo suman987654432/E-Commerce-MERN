@@ -39,8 +39,8 @@ const TopMenu = () => {
                 <FaUser size={20} className="cursor-pointer mt-1 " />
               </Nav.Link>
               <Dropdown.Menu>
-                <Dropdown.Item as={Link} to="/userlogin">Admin</Dropdown.Item>
-                <Dropdown.Item as={Link} to="/usersignup">User</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/userlogin">Login</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/usersignup">SignUp</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
 
