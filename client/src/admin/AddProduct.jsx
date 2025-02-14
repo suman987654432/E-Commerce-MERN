@@ -2,6 +2,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
+import BASE_URL from "../config";
 import "../css/AddProduct.css";
 
 const AddProduct = () => {
@@ -12,8 +13,30 @@ const AddProduct = () => {
         price: "",
         description: "",
     });
-    console.log(input);
     const [images, setImages] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState("");
+    const [subcategories, setSubcategories] = useState([]);
+    const [selectedSubcategory, setSelectedSubcategory] = useState("");
+
+    const categories = {
+        Furniture: ["Living Room Furniture", "Bedroom Furniture", "Dining Room Furniture", "Office Furniture", "Kids Furniture"],
+        Handbag: ["Tote Bags", "Shoulder Bags", "Crossbody Bags", "Backpacks", "Belt Bags"],
+        Books: ["Fiction", "Non-Fiction", "Children's Books", "Academic & Educational", "Comics & Graphic Novels", "Religion & Spirituality", "Arts & Entertainment", "Cookbooks & Food", "Poetry & Drama"],
+        Tech: ["Computers & Accessories", "Mobile Phones", "Audio & Sound Devices", "Gaming & Accessories", "Smart Home & IoT Devices", "Wearable Technology", "Cameras & Photography Equipment", "Office & Productivity", "Electric Vehicles & Accessories"],
+        Sneakers: ["Athletic Sneakers", "Casual & Lifestyle Sneakers", "Fashion & Designer Sneakers", "Streetwear & Hype Sneakers", "Outdoor & Hiking Sneakers"],
+        Travels: ["Luggage & Bags", "Travel Accessories", "Electronics & Gadgets", "Toiletries & Personal Care", "Safety & Security", "Travel Clothing & Footwear"],
+    };
+
+    const handleCategoryChange = (e) => {
+        const category = e.target.value;
+        setSelectedCategory(category);
+        setSubcategories(categories[category] || []);
+        setSelectedSubcategory("");
+    };
+
+    const handleSubcategoryChange = (e) => {
+        setSelectedSubcategory(e.target.value);
+    };
 
     const handleInput = (e) => {
         const { name, value } = e.target;
@@ -27,24 +50,23 @@ const AddProduct = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-
         for (let key in input) {
             formData.append(key, input[key]);
         }
-
-
+        formData.append("category", selectedCategory);
+        formData.append("subcategory", selectedSubcategory);
         for (let i = 0; i < images.length; i++) {
-            formData.append("image", images[i]);
+            formData.append("files", images[i]);
         }
 
-
         try {
-            await axios.post("http://localhost:8000/products/insertdata", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
+            const api = `${BASE_URL}/admin/productsave`;
+            await axios.post(api, formData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
             });
-            alert("Data saved successfully");
+            alert("File uploaded successfully!");
         } catch (error) {
-            alert("Error saving data: " + error.message);
+            console.error("Upload error:", error);
         }
     };
 
@@ -55,21 +77,25 @@ const AddProduct = () => {
                 <Form className="insert-form" onSubmit={handleSubmit}>
 
                     <div className="form-group">
-                        <Form.Label>Select Category</Form.Label>
-                        <Form.Select
-                            name="category"
-                            value={input.category}
-                            onChange={handleInput}
-                            required
-                        >
-                            <option value="">Choose Category</option>
-                            <option value="Furniture">Furniture</option>
-                            <option value="Hand Bag">Hand Bag</option>
-                            <option value="Books">Books</option>
-                            <option value="Tech">Tech</option>
-                            <option value="Sneakers">Sneakers</option>
-                            <option value="Travel">Travel</option>
-                        </Form.Select>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Select Product Category:</Form.Label>
+                            <Form.Select value={selectedCategory} onChange={handleCategoryChange}>
+                                <option value="">Select Category</option>
+                                {Object.keys(categories).map((cat) => (
+                                    <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
+
+                        <Form.Group className="mb-3">
+                            <Form.Label>Select Subcategory:</Form.Label>
+                            <Form.Select value={selectedSubcategory} onChange={handleSubcategoryChange} disabled={!selectedCategory}>
+                                <option value="">Select Subcategory</option>
+                                {subcategories.map((sub) => (
+                                    <option key={sub} value={sub}>{sub}</option>
+                                ))}
+                            </Form.Select>
+                        </Form.Group>
                     </div>
 
                     <div className="form-group">
