@@ -65,6 +65,19 @@ const AddProduct = () => {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             alert("File uploaded successfully!");
+
+            // Reset form values
+            setInput({
+                category: "",
+                brand: "",
+                name: "",
+                price: "",
+                description: "",
+            });
+            setSelectedCategory("");
+            setSubcategories([]);
+            setSelectedSubcategory("");
+            setImages(null);
         } catch (error) {
             console.error("Upload error:", error);
         }

@@ -5,9 +5,11 @@ import "../css/TopMenu.css";
 import { Navbar, Nav, Container, Form, FormControl, InputGroup, Dropdown } from "react-bootstrap";
 import logo from "../images/logo.png";
 import wish from "../images/image.png";
-
+import { useSelector } from "react-redux";
 const TopMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const ProductData = useSelector(state => state.mycart.cart)
+  const proLength = ProductData.length
 
   return (
     <Navbar bg="light" expand="lg" className="top-menu sm py-2 fixed=top">
@@ -46,7 +48,9 @@ const TopMenu = () => {
 
             <Nav.Link as={Link} to="/cart" className="d-flex align-items-center">
               <FaShoppingCart size={20} />
+              <sup className="myitem">{proLength}</sup>
             </Nav.Link>
+
             <Nav.Link as={Link} to="/wish" className="d-flex align-items-center">
               <img src={wish} alt="Wishlist" width="30" height="30" />
             </Nav.Link>

@@ -28,9 +28,9 @@ const AdminDashboard = () => {
                 <ul className="sidebar-menu">
                     <li><Link to="/admin" className="active"><FaHome /> Dashboard</Link></li>
                     <li><Link to="insert"><FaPlus /> Add Product</Link></li>
-                    <li><Link to="/dashboard/display"><FaTable /> Display User</Link></li>
+                    <li><Link to="updateproducts"><FaTable /> Update Products</Link></li>
                     <li><Link to="/dashboard/search"><FaSearch /> Search</Link></li>
-                    <li><Link to="/dashboard/update"><FaEdit /> Update</Link></li>
+                    <li><Link to=""><FaEdit /> Users</Link></li>
                     <li><Link to="/dashboard/contact"><FaAddressBook /> Contact</Link></li>
                     <li><Link to="/" className="logout"><FaSignOutAlt /> Logout</Link></li>
                 </ul>
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
                     </div>
                 </header>
                 <main>
-                   
+
                     <Outlet />
                 </main>
             </div>
