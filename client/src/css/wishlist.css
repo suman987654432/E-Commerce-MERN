@@ -1,0 +1,130 @@
+/* Container Styling */
+.wishlist-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading */
+.wishlist-heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Empty Message */
+.empty-message {
+    font-size: 18px;
+    color: #555;
+}
+
+/* Table Wrapper (for responsiveness) */
+.wishlist-table-wrapper {
+    overflow-x: auto;
+}
+
+/* Table Styling */
+.wishlist-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+}
+
+.wishlist-table th, .wishlist-table td {
+    padding: 12px;
+    text-align: center;
+    vertical-align: middle;
+    border-bottom: 1px solid #ddd;
+}
+
+.wishlist-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+/* Image */
+.wishlist-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 5px;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Button */
+.remove-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.3s;
+}
+
+.remove-button:hover {
+    background-color: #c82333;
+}
+.wishlist-name{
+    font-size: 17px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+    .wishlist-heading {
+        font-size: 24px;
+    }
+    
+    .wishlist-table th, .wishlist-table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .wishlist-image {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .remove-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .wishlist-heading {
+        font-size: 22px;
+    }
+    
+    .wishlist-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .wishlist-table {
+        font-size: 12px;
+    }
+    
+    .wishlist-image {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .remove-button {
+        padding: 5px 8px;
+        font-size: 10px;
+    }
+}

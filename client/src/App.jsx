@@ -11,6 +11,7 @@ import AdminDashboard from "./admin/AdminDash";
 import AddProduct from "./admin/AddProduct";
 import UpdateProduct from "./admin/UpdateProduct";
 import ToastProvider from "./components/ToastProvider"; // Import correctly
+import WishListPage from "./pages/WishListPage";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="cart" element={<Cart />} />
             <Route path="userlogin" element={<UserLogin />} />
             <Route path="usersignup" element={<UserSignUp />} />
+            <Route path="wish" element={< WishListPage />} />
           </Route>
 
           <Route path="admin" element={<AdminDashboard />}>
