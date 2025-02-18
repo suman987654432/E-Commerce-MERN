@@ -4,18 +4,18 @@ import "../css/ProductCard.css";
 import { FaRegHeart, FaStar } from "react-icons/fa";
 import { PiCurrencyInrThin } from "react-icons/pi";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { addtoCart } from "../redux/cartSlice";
-import { addToWishlist } from "../redux/wishListSlice";
+import { addToWishlist } from "../redux/wishlistSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const ProductCard = () => {
     const [mydata, setMydata] = useState([]);
     const dispatch = useDispatch();
-
-    // ✅ Fix: Use correct state path (mywishlist instead of wishlist)
+    const navigate = useNavigate();
     const wishlistItems = useSelector((state) => state.mywishlist.items);
 
-    // Fetch Product Data
+
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -36,7 +36,7 @@ const ProductCard = () => {
                 return (
                     <div key={key._id} className="product-card">
                         <div className="image-container">
-                            <img src={`${BASE_URL}/${key.defaultImage}`} alt={key.name} className="product-image" />
+                            <img src={`${BASE_URL}/${key.defaultImage}`} alt={key.name} className="product-image" onClick={() => navigate(`/productdetails/${key._id}`)} />
                             <FaRegHeart
                                 className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
                                 onClick={() => dispatch(addToWishlist({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage, ratings: key.ratings, status: key.status, qnty: 1 }))}
@@ -45,7 +45,7 @@ const ProductCard = () => {
                         <div className="product-info">
                             <div className="product-title-price">
                                 <h3 className="product-title">{key.name}</h3>
-                                <span className="product-price">
+                                <span className="product-price" style={{fontSize: "1.2rem"}}>
                                     <PiCurrencyInrThin /> {key.price}
                                 </span>
                             </div>

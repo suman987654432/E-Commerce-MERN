@@ -9,16 +9,42 @@ const cartSlice = createSlice({
     },
     reducers: {
         addtoCart: (state, actions) => {
-            const proData = state.cart.find(item => item.id === actions.payload.id);
-            if (proData) {
+            const data = state.cart.filter(key => key.id == actions.payload.id)
+            if (data.length >= 1) {
                 toast.error("Product is already in the cart");
-            } else {
-                state.cart.push(actions.payload);
+            }
+            else {
+                state.cart.push(actions.payload)
                 toast.success("Product added to the cart");
             }
-        }
+        },
+        proDelete: (state, actions) => {
+            state.cart = state.cart.filter(key => key.id != actions.payload)
+        },
+        qntyInc: (state, actions) => {
+            for (var i = 0; i < state.cart.length; i++) {
+                if (state.cart[i].id == actions.payload.id) {
+                    state.cart[i].qnty++;
+                }
+            }
+        },
+        qntyDec: (state, actions) => {
+            for (var i = 0; i < state.cart.length; i++) {
+                if (state.cart[i].id == actions.payload.id) {
+                    if (state.cart[i].qnty <= 1) {
+                        toast.success("Quantity can't be less than 1");
+                    }
+                    else {
+                        state.cart[i].qnty--;
+                    }
+
+                }
+            }
+        },
+
     }
 });
 
-export const { addtoCart } = cartSlice.actions;
+export const { addtoCart, proDelete, qntyInc, qntyDec } = cartSlice.actions;
 export default cartSlice.reducer;
+

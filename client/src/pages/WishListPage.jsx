@@ -1,12 +1,14 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromWishlist } from "../redux/wishListSlice";
+import { removeFromWishlist } from "../redux/wishlistSlice";
 import { FaTrash } from "react-icons/fa";
 import BASE_URL from "../config";
-import "../css/wishlist.css"; // Importing external CSS file
+import "../css/wishlist.css";
+import { useNavigate } from "react-router-dom";
 
 const WishlistPage = () => {
     const wishlistItems = useSelector((state) => state.mywishlist.items);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     return (
         <div className="wishlist-container">
@@ -33,6 +35,7 @@ const WishlistPage = () => {
                                             src={`${BASE_URL}/${product.defaultImage}`}
                                             alt={product.name}
                                             className="wishlist-image"
+                                            onClick={() => navigate(`/productdetails/${product.id}`)}
                                         />
                                     </td>
                                     <td className="wishlist-name">{product.name}</td>
