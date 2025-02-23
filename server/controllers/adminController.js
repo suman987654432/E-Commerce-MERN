@@ -1,4 +1,5 @@
 const ProductModel = require("../models/productModel");
+const jwt = require('jsonwebtoken');
 
 const productSave = async (req, res) => {
     try {
@@ -49,11 +50,62 @@ const productMakeNormal = async (req, res) => {
     res.status(201).send({ msg: "Product Status Succesfully Changed!" });
 }
 
+// Fixed admin credentials
+const ADMIN_CREDENTIALS = {
+    email: 'admin@example.com',
+    password: 'admin123',
+    name: 'Admin',
+    role: 'admin'
+};
 
+const adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Check against fixed admin credentials
+        if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+            // Generate admin token
+            const token = jwt.sign(
+                { 
+                    userId: 'admin-id',
+                    role: 'admin',
+                    name: ADMIN_CREDENTIALS.name,
+                    email: ADMIN_CREDENTIALS.email
+                },
+                'your-secret-key',
+                { expiresIn: '1d' }
+            );
+
+            res.status(200).json({
+                success: true,
+                message: 'Admin login successful',
+                token,
+                user: {
+                    _id: 'admin-id',
+                    name: ADMIN_CREDENTIALS.name,
+                    email: ADMIN_CREDENTIALS.email,
+                    role: ADMIN_CREDENTIALS.role
+                }
+            });
+        } else {
+            res.status(401).json({
+                success: false,
+                message: 'Invalid admin credentials'
+            });
+        }
+    } catch (error) {
+        console.error('Admin login error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error in admin login'
+        });
+    }
+};
 
 module.exports = {
     productSave,
     productDisplay,
     productMakePrimary,
-    productMakeNormal
+    productMakeNormal,
+    adminLogin
 };

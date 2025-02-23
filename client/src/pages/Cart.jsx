@@ -5,10 +5,14 @@ import { MdDelete } from "react-icons/md";
 import BASE_URL from "../config";
 import { proDelete, qntyInc, qntyDec } from "../redux/cartSlice";
 import "../css/cart.css"
+import { useNavigate } from "react-router-dom";
+import { isAuthenticated } from "../utils/authCheck";
+import { toast } from "react-toastify";
 
 const Cart = () => {
   const cartItems = useSelector((state) => state.mycart.cart);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let totAmount = 0;
 
   return (
@@ -72,10 +76,22 @@ const Cart = () => {
             </Table>
           </div>
 
-          {/* Total Amount Section */}
           <div className="total-amount-container">
             <h5>Total Amount: ₹{totAmount}</h5>
-            <button className="checkout-button">Proceed to Checkout</button>
+            <button
+              className="checkout-button"
+              onClick={() => {
+                // Only require login at checkout
+                if (!isAuthenticated()) {
+                  toast.error('Please login to checkout');
+                  navigate('/userlogin');
+                  return;
+                }
+                navigate("/checkout");
+              }}
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </>
       )}

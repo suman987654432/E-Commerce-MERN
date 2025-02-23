@@ -41,10 +41,13 @@ const cartSlice = createSlice({
                 }
             }
         },
-
+        clearCart: (state) => {
+            state.cart = [];
+            toast.success("Order placed successfully!");
+        },
     }
 });
 
-export const { addtoCart, proDelete, qntyInc, qntyDec } = cartSlice.actions;
+export const { addtoCart, proDelete, qntyInc, qntyDec, clearCart } = cartSlice.actions;
 export default cartSlice.reducer;
 

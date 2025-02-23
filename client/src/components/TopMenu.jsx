@@ -1,19 +1,30 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { FaSearch, FaUser, FaShoppingCart } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSearch, FaUser, FaShoppingCart, FaSignOutAlt } from "react-icons/fa";
 import "../css/TopMenu.css";
 import { Navbar, Nav, Container, Form, FormControl, InputGroup, Dropdown } from "react-bootstrap";
 import logo from "../images/logo.png";
 import wish from "../images/image.png";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 
 const TopMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const navigate = useNavigate();
 
   const ProductData = useSelector((state) => state.mycart.cart);
   const proLength = ProductData.length;
   const WishData = useSelector((state) => state.mywishlist.items || []);
   const wishLength = WishData.length;
+
+  const handleLogout = () => {
+    // Clear any stored tokens/data
+    localStorage.removeItem('token');
+    // Show success message
+    toast.success('Logged out successfully');
+    // Redirect to home
+    navigate('/');
+  };
 
   return (
     <Navbar bg="light" expand="lg" className="top-menu sm py-2 fixed-top">
@@ -46,6 +57,7 @@ const TopMenu = () => {
               <Dropdown.Menu>
                 <Dropdown.Item as={Link} to="/userlogin">Login</Dropdown.Item>
                 <Dropdown.Item as={Link} to="/usersignup">SignUp</Dropdown.Item>
+                <Dropdown.Item as={Link} to="/profile">Profile</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <Nav.Link as={Link} to="/cart" className="d-flex align-items-center position-relative">
@@ -67,6 +79,9 @@ const TopMenu = () => {
                 {wishLength}
               </span>
 
+            </Nav.Link>
+            <Nav.Link onClick={handleLogout} className="d-flex align-items-center">
+              <FaSignOutAlt size={20} className="text-danger" />
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>

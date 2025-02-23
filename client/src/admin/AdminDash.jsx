@@ -1,12 +1,30 @@
-import { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../css/Admin.css";
 import user from "../images/icon.png";
 import logo from "../images/logo.png";
 import { FaBars, FaTimes, FaHome, FaPlus, FaTable, FaSearch, FaEdit, FaAddressBook, FaSignOutAlt } from "react-icons/fa";
+import { toast } from "react-hot-toast";
 
 const AdminDashboard = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate();
+    const userRole = localStorage.getItem('userRole');
+
+    useEffect(() => {
+        if (!userRole || userRole !== 'admin') {
+            toast.error('Access denied. Admin only.');
+            navigate('/');
+        }
+    }, [userRole, navigate]);
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('userRole');
+        navigate('/admin-login');
+    };
+
     return (
         <div className="dashboard-container">
             {/* Sidebar */}
@@ -30,9 +48,24 @@ const AdminDashboard = () => {
                     <li><Link to="insert"><FaPlus /> Add Product</Link></li>
                     <li><Link to="updateproducts"><FaTable /> Update Products</Link></li>
                     <li><Link to="/dashboard/search"><FaSearch /> Search</Link></li>
-                    <li><Link to=""><FaEdit /> Users</Link></li>
+                    <li><Link to="users"><FaEdit /> Users</Link></li>
+                    <li><Link to="orders"><FaEdit /> Orders</Link></li>
                     <li><Link to="/dashboard/contact"><FaAddressBook /> Contact</Link></li>
-                    <li><Link to="/" className="logout"><FaSignOutAlt /> Logout</Link></li>
+                    <li>
+                        <button
+                            onClick={handleLogout}
+                            className="logout"
+                            style={{
+                                border: 'none',
+                                background: 'none',
+                                width: '100%',
+                                textAlign: 'left',
+                                padding: '10px 20px'
+                            }}
+                        >
+                            <FaSignOutAlt /> Logout
+                        </button>
+                    </li>
                 </ul>
             </div>
 

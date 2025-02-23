@@ -13,6 +13,11 @@ import UpdateProduct from "./admin/UpdateProduct";
 import ToastProvider from "./components/ToastProvider"; // Import correctly
 import WishListPage from "./pages/WishListPage"
 import ProductDetailsPage from "./pages/ProductDetailsPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import OrdersPage from "./admin/OrdersPage";
+import UsersPage from "./admin/UsersPage";
+import UserProfile from "./pages/UserProfile";
+import AdminLogin from "./admin/AdminLogin";
 
 const App = () => {
   return (
@@ -31,11 +36,16 @@ const App = () => {
             <Route path="usersignup" element={<UserSignUp />} />
             <Route path="wish" element={< WishListPage />} />
             <Route path="/productdetails/:id" element={<ProductDetailsPage />} />
+            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="profile" element={<UserProfile />} />
           </Route>
 
+          <Route path="/admin-login" element={<AdminLogin />} />
           <Route path="admin" element={<AdminDashboard />}>
             <Route path="insert" element={<AddProduct />} />
             <Route path="updateproducts" element={<UpdateProduct />} />
+            <Route path="orders" element={<OrdersPage />} />
+            <Route path="users" element={<UsersPage />} />
           </Route>
         </Routes>
       </BrowserRouter>

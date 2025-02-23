@@ -124,3 +124,113 @@
 .wishlist-btn:hover {
     background-color: #b02a37;
 }
+
+/* Review Section Styles */
+.average-rating {
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.star-filled {
+    color: #ffc107;
+    margin-right: 5px;
+}
+
+.star-empty {
+    color: #e4e5e9;
+    margin-right: 5px;
+}
+
+.rating-input {
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.review-item {
+    margin-bottom: 15px;
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-author {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.review-comment {
+    margin-bottom: 0;
+}
+
+.reviews-list {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.reviews-section {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.review-card {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.star-filled {
+    color: #ffc107;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 4px;
+}
+
+.star-empty {
+    color: #e4e5e9;
+    cursor: pointer;
+    font-size: 20px;
+    margin-right: 4px;
+}
+
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+}
+
+.star-rating .star-filled:hover ~ .star-filled,
+.star-rating:hover .star-filled {
+    color: #ffc107;
+}
+
+.rating-number {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin-left: 8px;
+}
+
+.review-item {
+    border: 1px solid #eee;
+    margin-bottom: 1rem;
+    transition: transform 0.2s;
+}
+
+.review-item:hover {
+    transform: translateY(-2px);
+}
+
+.review-text {
+    color: #555;
+    line-height: 1.6;
+}
+
+.write-review-section {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1rem;
+}

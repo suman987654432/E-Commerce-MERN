@@ -15,7 +15,6 @@ const ProductCard = () => {
     const navigate = useNavigate();
     const wishlistItems = useSelector((state) => state.mywishlist.items);
 
-
     useEffect(() => {
         const loadData = async () => {
             try {
@@ -32,6 +31,7 @@ const ProductCard = () => {
         <div className="product-list">
             {mydata.map((key) => {
                 const isWishlisted = wishlistItems.some((item) => item.id === key._id);
+                const averageRating = key.averageRating || key.ratings || 0;
 
                 return (
                     <div key={key._id} className="product-card">
@@ -45,16 +45,18 @@ const ProductCard = () => {
                         <div className="product-info">
                             <div className="product-title-price">
                                 <h3 className="product-title">{key.name}</h3>
-                                <span className="product-price" style={{fontSize: "1.2rem"}}>
+                                <span className="product-price" style={{ fontSize: "1.2rem" }}>
                                     <PiCurrencyInrThin /> {key.price}
                                 </span>
                             </div>
                             <p className="product-description">{key.description}</p>
                             <div className="product-rating">
-                                {[...Array(key.ratings)].map((_, index) => (
+                                {[...Array(Math.max(0, Math.floor(Number(averageRating))))].map((_, index) => (
                                     <FaStar key={index} className="star-icon" />
                                 ))}
+                                <span className="rating-text">({averageRating.toFixed(1)})</span>
                             </div>
+
                             <button className="add-to-cart"
                                 onClick={() => { dispatch(addtoCart({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage, ratings: key.ratings, status: key.status, qnty: 1 })) }}
 
