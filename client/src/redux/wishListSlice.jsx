@@ -22,8 +22,12 @@ const WishListSlice = createSlice({
             state.items = state.items.filter((item) => item.id !== action.payload);
             toast.warn("Product removed from Wishlist"); // ✅ Added toast on remove
         },
+        
+        clearWishlist: (state) => {
+            state.items = [];
+        },
     },
 });
 
-export const { addToWishlist, removeFromWishlist } = WishListSlice.actions;
+export const { addToWishlist, removeFromWishlist, clearWishlist } = WishListSlice.actions;
 export default WishListSlice.reducer;

@@ -5,12 +5,15 @@ import "../css/TopMenu.css";
 import { Navbar, Nav, Container, Form, FormControl, InputGroup, Dropdown } from "react-bootstrap";
 import logo from "../images/logo.png";
 import wish from "../images/image.png";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from 'react-toastify';
+import { clearCart } from "../redux/cartSlice";
+import { clearWishlist } from "../redux/wishlistSlice";
 
 const TopMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const ProductData = useSelector((state) => state.mycart.cart);
   const proLength = ProductData.length;
@@ -20,6 +23,12 @@ const TopMenu = () => {
   const handleLogout = () => {
     // Clear any stored tokens/data
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // Clear cart and wishlist
+    dispatch(clearCart());
+    dispatch(clearWishlist());
+    
     // Show success message
     toast.success('Logged out successfully');
     // Redirect to home
