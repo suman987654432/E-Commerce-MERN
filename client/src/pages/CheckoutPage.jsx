@@ -16,7 +16,7 @@ const CheckoutPage = () => {
 
   // Use items from location state if it's a "Buy Now" purchase, otherwise use cart items
   const items = location.state?.isBuyNow ? location.state.items : cartItems;
-  const totalAmount = items.reduce((total, item) => total + (item.price * item.qnty), 0);
+  const totalAmount = items.reduce((total, item) => total + (item.price * (item.qnty || 1)), 0);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -66,6 +66,34 @@ const CheckoutPage = () => {
 
       <Row>
         <Col md={8}>
+          {/* Product Summary Section - Add this section */}
+          <div className="product-summary mb-4">
+            <h4>Order Summary</h4>
+            <div className="product-list">
+              {items.map((item, index) => (
+                <div key={index} className="product-item">
+                  <div className="product-details">
+                    <div className="product-image">
+                      <img 
+                        src={`${BASE_URL}/${item.defaultImage || item.images?.[0]}` || "https://via.placeholder.com/50"} 
+                        alt={item.name} 
+                      />
+                    </div>
+                    <div className="product-info">
+                      <h5>{item.name}</h5>
+                      <p>Quantity: {item.qnty || 1}</p>
+                      <p>Price: ₹{item.price}</p>
+                      <p>Subtotal: ₹{item.price * (item.qnty || 1)}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="order-total">
+              <h5>Total Amount: ₹{totalAmount}</h5>
+            </div>
+          </div>
+          
           <Form onSubmit={handleSubmit} className="checkout-form">
             <h4>Shipping Information</h4>
 
@@ -162,26 +190,27 @@ const CheckoutPage = () => {
             </Row>
           </Form>
         </Col>
-
+        
         <Col md={4}>
           <div className="order-summary">
-            <h4>Order Summary</h4>
-            {items.map((item) => (
-              <div key={item.id} className="order-item">
-                <img src={`${BASE_URL}/${item.defaultImage}`} alt={item.name} />
-                <div className="item-details">
-                  <h6>{item.name}</h6>
-                  <p>Quantity: {item.qnty}</p>
-                  <p>₹{item.price * item.qnty}</p>
-                </div>
-              </div>
-            ))}
-            <hr />
-            <div className="total-amount">
-              <h5>Total Amount:</h5>
-              <h5>₹{totalAmount}</h5>
+            <h4>Payment Summary</h4>
+            <div className="summary-item">
+              <span>Items ({items.reduce((total, item) => total + (item.qnty || 1), 0)}):</span>
+              <span>₹{totalAmount}</span>
             </div>
-            <Button type="submit" className="place-order-btn" onClick={handleSubmit}>
+            <div className="summary-item">
+             
+            </div>
+            <div className="summary-item total">
+              <span>Total:</span>
+              <span>₹{totalAmount}</span>
+            </div>
+            <Button 
+              type="button" 
+              variant="primary" 
+              className="place-order-btn" 
+              onClick={handleSubmit}
+            >
               Place Order
             </Button>
           </div>
@@ -203,4 +232,4 @@ const CheckoutPage = () => {
   );
 };
 
-export default CheckoutPage; 
+export default CheckoutPage;
