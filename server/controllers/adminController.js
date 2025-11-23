@@ -1,5 +1,6 @@
 const ProductModel = require("../models/productModel");
 const jwt = require('jsonwebtoken');
+const Product = require('../models/productModel');
 
 const productSave = async (req, res) => {
     try {
@@ -102,10 +103,74 @@ const adminLogin = async (req, res) => {
     }
 };
 
+const deleteProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        console.log('Received delete request for ID:', id);
+        
+        if (!id) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'Product ID is required' 
+            });
+        }
+
+        const product = await Product.findByIdAndDelete(id);
+        
+        if (!product) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Product not found' 
+            });
+        }
+
+        res.status(200).json({ 
+            success: true,
+            message: 'Product deleted successfully',
+            deletedId: id
+        });
+
+    } catch (error) {
+        console.error('Delete error:', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'Server error while deleting product',
+            error: error.message 
+        });
+    }
+};
+
+const updateProduct = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updateData = { ...req.body };
+
+        // If new image is uploaded
+        if (req.file) {
+            updateData.defaultImage = req.file.path;
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+        
+        if (!updatedProduct) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        res.json({ 
+            message: 'Product updated successfully', 
+            product: updatedProduct 
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error updating product', error: error.message });
+    }
+};
+
 module.exports = {
     productSave,
     productDisplay,
     productMakePrimary,
     productMakeNormal,
-    adminLogin
+    adminLogin,
+    deleteProduct,
+    updateProduct
 };

@@ -39,7 +39,7 @@ const ProductCard = () => {
                             <img src={`${BASE_URL}/${key.defaultImage}`} alt={key.name} className="product-image" onClick={() => navigate(`/productdetails/${key._id}`)} />
                             <FaRegHeart
                                 className={`wishlist-icon ${isWishlisted ? "active" : ""}`}
-                                onClick={() => dispatch(addToWishlist({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage, ratings: key.ratings, status: key.status, qnty: 1 }))}
+                                onClick={() => dispatch(addToWishlist({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage,  status: key.status, qnty: 1 }))}
                             />
                         </div>
                         <div className="product-info">
@@ -58,7 +58,7 @@ const ProductCard = () => {
                             </div>
 
                             <button className="add-to-cart"
-                                onClick={() => { dispatch(addtoCart({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage, ratings: key.ratings, status: key.status, qnty: 1 })) }}
+                                onClick={() => { dispatch(addtoCart({ id: key._id, name: key.name, brand: key.brand, price: key.price, description: key.description, category: key.category, subcategory: key.subcategory, images: key.images, defaultImage: key.defaultImage, status: key.status, qnty: 1 })) }}
 
                             >Add to Cart</button>
                         </div>

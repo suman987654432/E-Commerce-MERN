@@ -18,12 +18,64 @@ const OrdersPage = () => {
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${BASE_URL}/order`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            setOrders(response.data.orders);
+            console.log('Fetching orders with token:', token);
+            console.log('BASE_URL:', BASE_URL);
+            
+            // Load cached orders first
+            const cachedOrders = localStorage.getItem('adminOrders');
+            if (cachedOrders) {
+                try {
+                    const parsedOrders = JSON.parse(cachedOrders);
+                    if (Array.isArray(parsedOrders) && parsedOrders.length > 0) {
+                        setOrders(parsedOrders);
+                        console.log('Loaded cached admin orders:', parsedOrders);
+                    }
+                } catch (cacheError) {
+                    console.error('Error parsing cached orders:', cacheError);
+                }
+            }
+            
+            // Try to fetch fresh data
+            try {
+                console.log('Trying admin endpoint: /order');
+                
+                const response = await axios.get(`${BASE_URL}/order`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                console.log('Response from /order:', response.data);
+                
+                // Handle different response structures
+                const ordersData = response.data.orders || 
+                                 response.data.data || 
+                                 response.data || 
+                                 [];
+                
+                if (Array.isArray(ordersData)) {
+                    setOrders(ordersData);
+                    // Cache orders
+                    localStorage.setItem('adminOrders', JSON.stringify(ordersData));
+                    console.log('Orders loaded and cached successfully:', ordersData);
+                } else {
+                    console.log('Invalid orders data structure:', typeof ordersData);
+                    // Keep cached orders if response is invalid
+                }
+                
+            } catch (fetchError) {
+                console.error('Error fetching fresh orders:', fetchError);
+                
+                if (fetchError.response?.status === 401) {
+                    setError('Session expired. Please login again.');
+                    setOrders([]);
+                    localStorage.removeItem('adminOrders');
+                } else {
+                    setError('Unable to fetch latest orders. Showing cached data.');
+                    // Keep cached orders on other errors
+                }
+            }
+            
         } catch (err) {
-            console.error('Error fetching orders:', err);
+            console.error('Error in fetchOrders:', err);
             setError('Failed to fetch orders');
             toast.error('Error loading orders');
         } finally {
@@ -128,18 +180,16 @@ const OrdersPage = () => {
                 <tbody>
                     {currentOrders.map((order) => (
                         <tr key={order._id}>
-                            <td>{order.fullName || order.userName}</td>
+                            <td>{order.fullName || order.userName || order.name || 'Not found'}</td>
                             <td>{order.email || 'Not found'}</td>
-
                             <td>
-                                {order.items.map((item, idx) => (
+                                {(order.items || []).map((item, idx) => (
                                     <div key={idx} className="mb-1">
-                                        <span>{item.name}</span>
-
+                                        <span>{item.name} (Qty: {item.qnty || item.quantity || 1})</span>
                                     </div>
                                 ))}
                             </td>
-                            <td>₹{order.amount}</td>
+                            <td>₹{order.amount || order.total || 0}</td>
                             <td>
                                 <Dropdown>
                                     <Dropdown.Toggle

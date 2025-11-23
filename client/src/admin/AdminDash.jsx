@@ -3,7 +3,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../css/Admin.css";
 import user from "../images/icon.png";
 import logo from "../images/logo.png";
-import { FaBars, FaTimes, FaHome, FaPlus, FaTable, FaSearch, FaEdit, FaAddressBook, FaSignOutAlt } from "react-icons/fa";
+import { FaBars, FaTimes, FaHome, FaPlus, FaTable, FaSearch, FaEdit, FaSignOutAlt } from "react-icons/fa";
 import { toast } from "react-hot-toast";
 
 const AdminDashboard = () => {
@@ -50,7 +50,7 @@ const AdminDashboard = () => {
                     <li><Link to="/dashboard/search"><FaSearch /> Search</Link></li>
                     <li><Link to="users"><FaEdit /> Users</Link></li>
                     <li><Link to="orders"><FaEdit /> Orders</Link></li>
-                    <li><Link to="/dashboard/contact"><FaAddressBook /> Contact</Link></li>
+         
                     <li>
                         <button
                             onClick={handleLogout}

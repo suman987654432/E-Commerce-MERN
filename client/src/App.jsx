@@ -19,6 +19,7 @@ import UsersPage from "./admin/UsersPage";
 import UserProfile from "./pages/UserProfile";
 import AdminLogin from "./admin/AdminLogin";
 
+
 const App = () => {
   return (
     <>
@@ -38,6 +39,7 @@ const App = () => {
             <Route path="/productdetails/:id" element={<ProductDetailsPage />} />
             <Route path="checkout" element={<CheckoutPage />} />
             <Route path="profile" element={<UserProfile />} />
+            <Route path="/order-success" element={<div className="container mt-5 text-center"><h2>Order Placed Successfully!</h2></div>} />
           </Route>
 
           <Route path="/admin-login" element={<AdminLogin />} />
@@ -46,6 +48,7 @@ const App = () => {
             <Route path="updateproducts" element={<UpdateProduct />} />
             <Route path="orders" element={<OrdersPage />} />
             <Route path="users" element={<UsersPage />} />
+ 
           </Route>
         </Routes>
       </BrowserRouter>

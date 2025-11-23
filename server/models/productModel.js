@@ -8,7 +8,7 @@ const productSchema=new mongoose.Schema({
     subcategory:String,
     images:[String],
     defaultImage:String,
-    ratings:{ type: Number, default:0},
+
     status:{ type: String, default:'normal'},
 })
 

@@ -20,7 +20,10 @@ const TopMenu = () => {
   const WishData = useSelector((state) => state.mywishlist.items || []);
   const wishLength = WishData.length;
 
-  const handleLogout = () => {
+  const handleLogout = (e) => {
+    e.preventDefault(); // Prevent form submission
+    e.stopPropagation(); // Stop event bubbling
+    
     // Clear any stored tokens/data
     localStorage.removeItem('token');
     localStorage.removeItem('user');
@@ -89,7 +92,7 @@ const TopMenu = () => {
               </span>
 
             </Nav.Link>
-            <Nav.Link onClick={handleLogout} className="d-flex align-items-center">
+            <Nav.Link onClick={handleLogout} className="d-flex align-items-center" style={{ cursor: 'pointer' }}>
               <FaSignOutAlt size={20} className="text-danger" />
             </Nav.Link>
           </Nav>

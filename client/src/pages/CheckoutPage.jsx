@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { clearCart } from "../redux/cartSlice";
 import OrderModal from "../components/OrderModal";
 import "../css/checkout.css";
+import axios from "axios";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const CheckoutPage = () => {
     pincode: ""
   });
 
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [showOrderModal, setShowOrderModal] = useState(false);
 
   const handleInputChange = (e) => {
@@ -40,7 +42,98 @@ const CheckoutPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowOrderModal(true);
+    
+    // Validate form data
+    if (!formData.fullName || !formData.email || !formData.phone || !formData.address) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    // Debug: Log the order data before sending
+    const userData = JSON.parse(localStorage.getItem('user') || '{}');
+    const userId = userData?.id || userData?._id || userData?.userId;
+    const token = localStorage.getItem('token');
+    
+    console.log('User data:', userData);
+    console.log('User ID:', userId);
+    console.log('Token:', token);
+    console.log('Form data:', formData);
+    console.log('Items:', items);
+    console.log('BASE_URL:', BASE_URL);
+
+    if (!userId || !token) {
+      toast.error('Please login to place order');
+      return;
+    }
+
+    // Use only the working endpoint
+    try {
+      const orderData = {
+        userId: userId,
+        user: userId, // Add both fields to ensure compatibility
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        address: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.pincode}`,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+        items: items.map(item => ({
+          productId: item._id || item.id,
+          name: item.name,
+          price: item.price,
+          qnty: item.qnty || 1,
+          quantity: item.qnty || 1,
+          image: item.defaultImage || item.images?.[0] || ''
+        })),
+        amount: totalAmount,
+        total: totalAmount,
+        paymentMethod: paymentMethod,
+        status: 'Pending',
+        paymentStatus: paymentMethod === 'cod' ? 'Pending' : 'Pending'
+      };
+
+      console.log('Sending order data to /order/create:', orderData);
+
+      const response = await axios.post(`${BASE_URL}/order/create`, orderData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Order creation response:', response.data);
+
+      if (response.data.success || response.status === 200 || response.status === 201) {
+        toast.success('Order placed successfully!');
+        
+        // Clear cached orders so fresh data is fetched
+        localStorage.removeItem('userOrders');
+        localStorage.removeItem('adminOrders');
+        
+        // Clear cart if not buy now
+        if (!location.state?.isBuyNow) {
+          dispatch(clearCart());
+        }
+        
+        navigate('/order-success', { 
+          state: { 
+            orderId: response.data.orderId || response.data.order?._id || response.data._id,
+            amount: totalAmount 
+          } 
+        });
+      } else {
+        throw new Error(response.data.message || 'Failed to place order');
+      }
+
+    } catch (error) {
+      console.error('Order creation error:', error);
+      console.error('Error response:', error.response?.data);
+      
+      // Show modal as fallback
+      toast.error('Direct order failed, please try through the confirmation modal');
+      setShowOrderModal(true);
+    }
   };
 
   const handleOrderComplete = async (success) => {
@@ -50,7 +143,7 @@ const CheckoutPage = () => {
         if (!location.state?.isBuyNow) {
           dispatch(clearCart());
         }
-        toast.success("Order placed successfully!");
+        // Remove duplicate toast - it's already shown in OrderModal
         navigate("/order-success");
       } catch (error) {
         console.error("Order completion error:", error);
@@ -75,6 +168,7 @@ const CheckoutPage = () => {
                   <div className="product-details">
                     <div className="product-image">
                       <img 
+                        // eslint-disable-next-line no-constant-binary-expression
                         src={`${BASE_URL}/${item.defaultImage || item.images?.[0]}` || "https://via.placeholder.com/50"} 
                         alt={item.name} 
                       />
@@ -188,6 +282,31 @@ const CheckoutPage = () => {
                 </Form.Group>
               </Col>
             </Row>
+
+            <h4 className="mt-4">Payment Method</h4>
+            <Form.Group className="mb-3">
+              <div className="payment-options">
+                <Form.Check
+                  type="radio"
+                  id="cod"
+                  name="paymentMethod"
+                  value="cod"
+                  checked={paymentMethod === "cod"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  label="Cash on Delivery (COD)"
+                  className="mb-2"
+                />
+                <Form.Check
+                  type="radio"
+                  id="online"
+                  name="paymentMethod"
+                  value="online"
+                  checked={paymentMethod === "online"}
+                  onChange={(e) => setPaymentMethod(e.target.value)}
+                  label="Online Payment"
+                />
+              </div>
+            </Form.Group>
           </Form>
         </Col>
         
@@ -222,10 +341,21 @@ const CheckoutPage = () => {
         onHide={() => setShowOrderModal(false)}
         onOrderComplete={handleOrderComplete}
         amount={totalAmount}
+        paymentMethod={paymentMethod}
         formData={{
           ...formData,
-          items: items,
-          amount: totalAmount
+          items: items.map(item => ({
+            productId: item._id || item.id,
+            name: item.name,
+            price: item.price,
+            qnty: item.qnty || 1,
+            image: item.defaultImage || item.images?.[0] || ''
+          })),
+          amount: totalAmount,
+          userId: JSON.parse(localStorage.getItem('user') || '{}')?.id || 
+                  JSON.parse(localStorage.getItem('user') || '{}')?.userId ||
+                  JSON.parse(localStorage.getItem('user') || '{}')?._id,
+          address: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.pincode}`
         }}
       />
     </Container>
