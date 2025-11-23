@@ -4,7 +4,6 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
-
 import UserLogin from "./auth/UserLogin";
 import UserSignUp from "./auth/UserSignUp";
 import AdminDashboard from "./admin/AdminDash";
