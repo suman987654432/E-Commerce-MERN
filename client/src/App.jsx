@@ -4,8 +4,9 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Product from "./pages/Product";
 import Cart from "./pages/Cart";
-import UserLogin from "./auth/UserLogin";
-import UserSignUp from "./auth/UserSignUp";
+import UserLogin from "./Auth/UserLogin";
+
+import UserSignUp from "./Auth/UserSignUp";
 import AdminDashboard from "./admin/AdminDash";
 import AddProduct from "./admin/AddProduct";
 import UpdateProduct from "./admin/UpdateProduct";
