@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import myReducer from "./cartSlice";
-import wishlistReducer from "../redux/wishlistSlice";
+import wishlistReducer from "./wishlistSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // ✅ Local Storage
 
