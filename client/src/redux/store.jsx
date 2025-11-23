@@ -16,7 +16,7 @@ const cartPersistConfig = {
     storage,
 };
 
-// 🔹 Create Persisted Reducers
+
 const persistedWishlistReducer = persistReducer(wishlistPersistConfig, wishlistReducer);
 const persistedCartReducer = persistReducer(cartPersistConfig, myReducer);
 

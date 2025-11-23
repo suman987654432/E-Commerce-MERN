@@ -7,7 +7,6 @@ import Cart from "./pages/Cart";
 
 import UserLogin from "./auth/UserLogin";
 import UserSignUp from "./auth/UserSignUp";
-
 import AdminDashboard from "./admin/AdminDash";
 import AddProduct from "./admin/AddProduct";
 import UpdateProduct from "./admin/UpdateProduct";
